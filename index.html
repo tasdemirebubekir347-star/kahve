@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1210" />
+  <title>Bir şey soracam…</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #1a1210;
+      --bg-2: #2a1c18;
+      --foam: #f6efe6;
+      --foam-dim: rgba(246, 239, 230, 0.72);
+      --latte: #d4a574;
+      --latte-hot: #e8b87a;
+      --espresso: #3d2a22;
+      --steam: rgba(246, 239, 230, 0.08);
+      --yes: #c9784a;
+      --yes-glow: rgba(201, 120, 74, 0.45);
+      --radius: 18px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--foam);
+      font-family: "Outfit", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse 90% 60% at 50% -10%, #4a2f24 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 85% 70%, #2e1f18 0%, transparent 50%),
+        radial-gradient(ellipse 40% 35% at 10% 80%, #3a241c 0%, transparent 45%),
+        var(--bg);
+    }
+
+    .steam {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .steam span {
+      position: absolute;
+      bottom: -10%;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--steam) 0%, transparent 70%);
+      animation: rise 14s var(--ease) infinite;
+      opacity: 0;
+    }
+
+    .steam span:nth-child(1) { left: 12%; animation-delay: 0s; width: 160px; height: 160px; }
+    .steam span:nth-child(2) { left: 48%; animation-delay: 3s; width: 100px; height: 100px; }
+    .steam span:nth-child(3) { left: 72%; animation-delay: 6.5s; width: 140px; height: 140px; }
+    .steam span:nth-child(4) { left: 28%; animation-delay: 9s; width: 90px; height: 90px; }
+
+    @keyframes rise {
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      15% { opacity: 0.7; }
+      100% { transform: translateY(-110vh) scale(1.4); opacity: 0; }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 1.5rem 1.35rem 2rem;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 1.1rem;
+    }
+
+    .eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--latte);
+      font-weight: 500;
+      opacity: 0;
+      animation: in 0.8s var(--ease) 0.1s forwards;
+    }
+
+    h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 700;
+      font-size: clamp(2.35rem, 9vw, 3.15rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: in 0.9s var(--ease) 0.25s forwards;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 500;
+      color: var(--latte-hot);
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: var(--foam-dim);
+      max-width: 34ch;
+      opacity: 0;
+      animation: in 0.9s var(--ease) 0.4s forwards;
+    }
+
+    .section {
+      opacity: 0;
+      animation: in 0.9s var(--ease) forwards;
+    }
+
+    .section:nth-of-type(1) { animation-delay: 0.55s; }
+    .section:nth-of-type(2) { animation-delay: 0.7s; }
+    .section:nth-of-type(3) { animation-delay: 0.85s; }
+
+    .label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--foam-dim);
+      margin-bottom: 0.7rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chip {
+      appearance: none;
+      border: 1px solid rgba(246, 239, 230, 0.14);
+      background: rgba(246, 239, 230, 0.04);
+      color: var(--foam);
+      font: inherit;
+      font-size: 0.92rem;
+      padding: 0.65rem 0.95rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.25s var(--ease), border-color 0.25s, transform 0.2s;
+    }
+
+    .chip:hover { background: rgba(246, 239, 230, 0.09); }
+    .chip:active { transform: scale(0.97); }
+    .chip.is-on {
+      background: var(--latte);
+      border-color: var(--latte);
+      color: var(--bg);
+      font-weight: 600;
+    }
+
+    .surprise {
+      position: relative;
+      padding: 1.15rem 1.2rem;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(212, 165, 116, 0.12), transparent 60%),
+        rgba(246, 239, 230, 0.04);
+      border: 1px solid rgba(212, 165, 116, 0.22);
+      overflow: hidden;
+    }
+
+    .surprise p {
+      font-size: 0.98rem;
+      line-height: 1.5;
+      color: var(--foam-dim);
+    }
+
+    .surprise strong {
+      color: var(--foam);
+      font-weight: 600;
+    }
+
+    .blur-secret {
+      filter: blur(7px);
+      user-select: none;
+      transition: filter 0.6s var(--ease);
+    }
+
+    .surprise.is-open .blur-secret { filter: blur(0); }
+
+    .reveal-btn {
+      margin-top: 0.85rem;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--latte);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      padding: 0;
+    }
+
+    .actions {
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 0.25rem;
+      opacity: 0;
+      animation: in 0.9s var(--ease) 1s forwards;
+    }
+
+    .btn-yes {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #d88958, var(--yes));
+      color: #1a1210;
+      font: inherit;
+      font-size: 1.08rem;
+      font-weight: 600;
+      padding: 1.05rem 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 12px 40px var(--yes-glow);
+      transition: transform 0.2s var(--ease), box-shadow 0.2s;
+    }
+
+    .btn-yes:hover { transform: translateY(-1px); box-shadow: 0 16px 48px var(--yes-glow); }
+    .btn-yes:active { transform: scale(0.98); }
+
+    .btn-shy {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--foam-dim);
+      font: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .btn-shy:hover { color: var(--foam); }
+
+    .alt-panel {
+      display: none;
+      flex-direction: column;
+      gap: 0.85rem;
+      padding: 1.1rem 1.15rem;
+      border-radius: var(--radius);
+      background: rgba(246, 239, 230, 0.05);
+      border: 1px solid rgba(246, 239, 230, 0.12);
+      animation: in 0.45s var(--ease) forwards;
+    }
+
+    .alt-panel.is-open { display: flex; }
+
+    .alt-panel p {
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: var(--foam-dim);
+    }
+
+    .alt-fields {
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .alt-fields label {
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--foam-dim);
+    }
+
+    .alt-fields input {
+      width: 100%;
+      appearance: none;
+      border: 1px solid rgba(246, 239, 230, 0.16);
+      background: rgba(26, 18, 16, 0.55);
+      color: var(--foam);
+      font: inherit;
+      font-size: 1rem;
+      padding: 0.75rem 0.85rem;
+      border-radius: 12px;
+      color-scheme: dark;
+    }
+
+    .alt-fields input:focus {
+      outline: none;
+      border-color: var(--latte);
+    }
+
+    .btn-alt {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(246, 239, 230, 0.12);
+      color: var(--foam);
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.95rem 1.2rem;
+      cursor: pointer;
+      transition: background 0.25s var(--ease), color 0.25s, box-shadow 0.25s, transform 0.15s;
+    }
+
+    .btn-alt:hover { background: rgba(246, 239, 230, 0.18); }
+    .btn-alt:active { transform: scale(0.98); }
+
+    .btn-alt.is-ready {
+      background: linear-gradient(180deg, #d88958, var(--yes));
+      color: #1a1210;
+      box-shadow: 0 12px 40px var(--yes-glow);
+    }
+
+    .btn-alt.is-ready:hover {
+      background: linear-gradient(180deg, #e09464, #d88958);
+    }
+
+    .alt-error {
+      display: none;
+      font-size: 0.85rem;
+      color: #e8a090;
+    }
+
+    .alt-error.is-show { display: block; }
+
+    @keyframes in {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Success overlay */
+    .done {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 30%, #5a3828 0%, transparent 55%),
+        rgba(26, 18, 16, 0.96);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s var(--ease);
+    }
+
+    .done.is-show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .done-inner {
+      text-align: center;
+      max-width: 22rem;
+      transform: translateY(20px) scale(0.96);
+      transition: transform 0.55s var(--ease);
+    }
+
+    .done.is-show .done-inner {
+      transform: translateY(0) scale(1);
+    }
+
+    .cup {
+      font-size: 3.2rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      animation: bob 2.4s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .done h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.9rem, 7vw, 2.4rem);
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+
+    .done p {
+      color: var(--foam-dim);
+      line-height: 1.55;
+      margin-bottom: 0.35rem;
+    }
+
+    .done .pick {
+      color: var(--latte-hot);
+      font-weight: 500;
+      margin-top: 0.85rem;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      top: -10px;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0.2; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .section, .eyebrow, h1, .lead, .actions { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    ÖZELLEŞTİR:
+    Aşağıdaki CONFIG objesini düzenle, kaydet, link at.
+  -->
+  <div class="steam" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <main class="wrap" id="invite">
+    <p class="eyebrow" id="eyebrow">özel davet</p>
+    <h1 id="headline">Hey <em id="herName">…</em>,<br />kahve içer miyiz?</h1>
+    <p class="lead" id="lead">
+      Instagram DM’de yazmaya utanıp buraya sığdırdım.
+      Seninle gerçek bir kahve, gerçek bir sohbet — ekran yok, telaş yok.
+    </p>
+
+    <div class="section">
+      <p class="label">Ne zaman?</p>
+      <div class="chips" id="days" role="group" aria-label="Gün"></div>
+    </div>
+
+    <div class="section">
+      <p class="label">Nerede?</p>
+      <div class="chips" id="places" role="group" aria-label="Yer"></div>
+    </div>
+
+    <div class="section">
+      <div class="surprise" id="surprise">
+        <p>
+          <strong>Küçük bir not:</strong>
+          <span class="blur-secret" id="secretText">masa hazır…</span>
+        </p>
+        <button type="button" class="reveal-btn" id="revealBtn">notu oku</button>
+      </div>
+    </div>
+
+    <div class="actions" id="actions">
+      <button type="button" class="btn-yes" id="yesBtn">Evet, geliyorum ☕</button>
+      <button type="button" class="btn-shy" id="shyBtn">Belki sonra…</button>
+    </div>
+
+    <div class="alt-panel" id="altPanel" hidden>
+      <p id="altLead">Sorun değil — sen bir gün seç, aynı yerde buluşalım.</p>
+      <div class="alt-fields">
+        <label>Gün</label>
+        <div class="chips" id="altDayChips" role="group" aria-label="Gün seç"></div>
+        <label>Saat</label>
+        <div class="chips" id="altTimeChips" role="group" aria-label="Saat seç"></div>
+      </div>
+      <p class="alt-error" id="altError">Önce bir gün seç.</p>
+      <button type="button" class="btn-alt" id="altConfirm">Bu tarihte buluşalım</button>
+    </div>
+  </main>
+
+  <div class="done" id="done" role="dialog" aria-modal="true" aria-labelledby="doneTitle">
+    <div class="done-inner">
+      <div class="cup" aria-hidden="true">☕</div>
+      <h2 id="doneTitle">Harika.</h2>
+      <p id="doneMsg">Takvimime yazıyorum. Detayı birazdan yazacağım.</p>
+      <p class="pick" id="donePick"></p>
+      <button type="button" class="btn-alt" id="copyBtn" style="margin-top:1rem;display:none">
+        Seçimi kopyala — Instagram’dan at
+      </button>
+      <p id="notifyHint" style="margin-top:0.75rem;font-size:0.82rem;color:var(--foam-dim);display:none"></p>
+    </div>
+  </div>
+
+  <script>
+    // ========== BURAYI DÜZENLE ==========
+    const CONFIG = {
+      herName: "Eda",
+      yourName: "Ebubekir",
+      headlineBefore: "Hey",
+      lead:
+        "Yarın öğlen 14:00’te Orta Bahçe’de kahve içelim mi? Kısa, net, güzel bir mola — seninle.",
+      secret:
+        "Belki tek bir kahve. Belki hiçbir şey olmaz. Ama bazen kader, iki fincanın kenarından başlar — bir kez denemeye değer.",
+      place: "Orta Bahçe",
+      when: "Yarın · 14:00",
+      days: ["Yarın"],
+      times: ["14:00"],
+      yesText: "Evet, geliyorum ☕",
+      shyText: "Belki sonra…",
+      doneTitle: "Harika.",
+      doneMsg: "Yarın 14:00’te Orta Bahçe’de görüşürüz.",
+      altLead: "Sorun değil — sen bir gün seç, aynı yerde buluşalım.",
+      altConfirmText: "Bu tarihte buluşalım",
+      defaultAltTime: "14:00",
+      altTimes: ["14:00", "16:00", "18:00"],
+      // FormSubmit — ilk seferde Gmail’e “Activate Form” maili gelir, linke bas.
+      notifyEmail: "tasdemirebubekir347@gmail.com",
+      // Anlık bildirim (mail gecikirse): telefonda ntfy.app aç → bu konuya abone ol
+      ntfyTopic: "eda-orta-bahce-tasdemir347",
+    };
+    // ===================================
+
+    const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    $("herName").textContent = CONFIG.herName;
+    $("headline").innerHTML =
+      `${CONFIG.headlineBefore} <em>${escapeHtml(CONFIG.herName)}</em>,<br />kahve içer miyiz?`;
+    $("lead").textContent = CONFIG.lead;
+    $("secretText").textContent = CONFIG.secret;
+    $("yesBtn").textContent = CONFIG.yesText;
+    $("shyBtn").textContent = CONFIG.shyText;
+    $("doneTitle").textContent = CONFIG.doneTitle;
+    $("doneMsg").textContent = CONFIG.doneMsg;
+    $("altLead").textContent = CONFIG.altLead;
+    $("altConfirm").textContent = CONFIG.altConfirmText;
+
+    let selectedDay = CONFIG.when || CONFIG.days[0] || null;
+    let selectedPlace = CONFIG.place || null;
+    let dayChipBtn = null;
+    let lastShareText = "";
+    let altIso = null;
+    let altTime = CONFIG.defaultAltTime || "14:00";
+
+    function fillFixedChip(containerId, label) {
+      const el = $(containerId);
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip is-on";
+      b.textContent = label;
+      b.setAttribute("aria-pressed", "true");
+      el.appendChild(b);
+      return b;
+    }
+
+    dayChipBtn = fillFixedChip("days", CONFIG.when || CONFIG.days[0]);
+    fillFixedChip("places", CONFIG.place);
+
+    function toIso(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+
+    function formatTrDate(isoDate, time) {
+      const [y, m, d] = isoDate.split("-").map(Number);
+      const dt = new Date(y, m - 1, d);
+      const formatted = new Intl.DateTimeFormat("tr-TR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      }).format(dt);
+      return `${formatted} · ${time}`;
+    }
+
+    function shortDayLabel(d) {
+      const wd = new Intl.DateTimeFormat("tr-TR", { weekday: "short" }).format(d);
+      return `${wd} ${d.getDate()}/${d.getMonth() + 1}`;
+    }
+
+    // Önümüzdeki 10 gün — native date input Instagram’da bozuluyor
+    (function buildAltDayChips() {
+      const wrap = $("altDayChips");
+      const start = new Date();
+      start.setHours(12, 0, 0, 0);
+      for (let i = 1; i <= 10; i++) {
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        const iso = toIso(d);
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip";
+        b.textContent = shortDayLabel(d);
+        b.addEventListener("click", () => {
+          altIso = iso;
+          wrap.querySelectorAll(".chip").forEach((c) => c.classList.remove("is-on"));
+          b.classList.add("is-on");
+          $("altError").classList.remove("is-show");
+          syncAltReady();
+        });
+        wrap.appendChild(b);
+      }
+    })();
+
+    (function buildAltTimeChips() {
+      const wrap = $("altTimeChips");
+      const times = CONFIG.altTimes || ["14:00"];
+      times.forEach((t, idx) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip" + (t === altTime || (idx === 0 && !times.includes(altTime)) ? " is-on" : "");
+        if (b.classList.contains("is-on")) altTime = t;
+        b.textContent = t;
+        b.addEventListener("click", () => {
+          altTime = t;
+          wrap.querySelectorAll(".chip").forEach((c) => c.classList.remove("is-on"));
+          b.classList.add("is-on");
+          syncAltReady();
+        });
+        wrap.appendChild(b);
+      });
+    })();
+
+    function syncAltReady() {
+      $("altConfirm").classList.toggle("is-ready", Boolean(altIso));
+    }
+
+    // FormSubmit: Instagram WebView’de fetch bazen düşer → gizli form + iframe
+    function ensureNotifyForm(email) {
+      let iframe = document.getElementById("notifyFrame");
+      if (!iframe) {
+        iframe = document.createElement("iframe");
+        iframe.name = "notifyFrame";
+        iframe.id = "notifyFrame";
+        iframe.title = "notify";
+        iframe.style.cssText = "position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none";
+        document.body.appendChild(iframe);
+      }
+      let form = document.getElementById("notifyForm");
+      if (!form) {
+        form = document.createElement("form");
+        form.id = "notifyForm";
+        form.method = "POST";
+        form.target = "notifyFrame";
+        form.style.display = "none";
+        document.body.appendChild(form);
+      }
+      form.action = `https://formsubmit.co/${encodeURIComponent(email)}`;
+      form.innerHTML = "";
+      return form;
+    }
+
+    function addHidden(form, name, value) {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    }
+
+    async function notifyYou(payload) {
+      const email = (CONFIG.notifyEmail || "").trim();
+      const topic = (CONFIG.ntfyTopic || "").trim();
+      let ok = false;
+
+      // 1) ntfy — anında telefon bildirimi (aktivasyon yok)
+      if (topic) {
+        try {
+          const res = await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
+            method: "POST",
+            headers: {
+              Title: `${CONFIG.herName} cevap verdi`,
+              Priority: "high",
+              Tags: "coffee,heart",
+            },
+            body: payload,
+          });
+          if (res.ok) ok = true;
+        } catch (_) {}
+      }
+
+      if (email) {
+        // 2) gizli form POST
+        try {
+          const form = ensureNotifyForm(email);
+          addHidden(form, "_subject", `${CONFIG.herName} tarih seçti — date invite`);
+          addHidden(form, "_captcha", "false");
+          addHidden(form, "_template", "table");
+          addHidden(form, "_honey", "");
+          addHidden(form, "name", CONFIG.herName);
+          addHidden(form, "message", payload);
+          addHidden(form, "ne_zaman", payload);
+          form.submit();
+          ok = true;
+        } catch (_) {}
+
+        // 3) ajax yedek
+        try {
+          const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(email)}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              _subject: `${CONFIG.herName} tarih seçti — date invite`,
+              _captcha: "false",
+              name: CONFIG.herName,
+              message: payload,
+            }),
+          });
+          if (res.ok) ok = true;
+        } catch (_) {}
+      }
+
+      return ok;
+    }
+
+    function finishYes(whenLabel, opts = {}) {
+      selectedDay = whenLabel;
+      const pick = opts.pick || `${whenLabel} · ${selectedPlace}`;
+      $("doneMsg").textContent = opts.msg || pick;
+      $("donePick").textContent = pick;
+      $("done").classList.add("is-show");
+      burstConfetti();
+
+      lastShareText = opts.custom
+        ? `Merhaba — ${whenLabel} için ${selectedPlace} tamam ☕`
+        : `Merhaba — ${CONFIG.when} ${selectedPlace} tamam ☕`;
+
+      const copyBtn = $("copyBtn");
+      copyBtn.style.display = "block";
+      copyBtn.textContent = "Seçimi kopyala — Instagram’dan at";
+
+      const hint = $("notifyHint");
+      hint.style.display = "block";
+      hint.textContent = "Seçimin iletiliyor…";
+      notifyYou(
+        `${CONFIG.herName} cevap verdi.\nNe zaman: ${whenLabel}\nNerede: ${selectedPlace}\nÖzel tarih: ${opts.custom ? "evet" : "hayır (önerilen gün)"}`
+      ).then((ok) => {
+        hint.textContent = ok
+          ? "Bildirim gitti. İstersen yine de kopyalayıp Instagram’dan at."
+          : "Bildirim gitmeyebilir — seçimi kopyalayıp Instagram’dan at.";
+      });
+
+      try {
+        localStorage.setItem(
+          "dateInviteYes",
+          JSON.stringify({
+            day: selectedDay,
+            place: selectedPlace,
+            custom: Boolean(opts.custom),
+            isoDate: opts.isoDate || null,
+            time: opts.time || null,
+            at: Date.now(),
+          })
+        );
+      } catch (_) {}
+    }
+
+    $("copyBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(lastShareText);
+        $("copyBtn").textContent = "Kopyalandı ✓";
+      } catch (_) {
+        window.prompt("Kopyala:", lastShareText);
+      }
+    });
+
+    $("revealBtn").addEventListener("click", () => {
+      $("surprise").classList.add("is-open");
+      $("revealBtn").textContent = "okundu";
+      $("revealBtn").disabled = true;
+    });
+
+    $("yesBtn").addEventListener("click", () => {
+      finishYes(selectedDay, {
+        msg: CONFIG.doneMsg,
+        pick: `${selectedDay} · ${selectedPlace}`,
+      });
+    });
+
+    $("shyBtn").addEventListener("click", () => {
+      $("actions").style.display = "none";
+      const panel = $("altPanel");
+      panel.hidden = false;
+      panel.classList.add("is-open");
+      panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    $("altConfirm").addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!altIso) {
+        $("altError").classList.add("is-show");
+        return;
+      }
+      const time = altTime || CONFIG.defaultAltTime || "14:00";
+      const label = formatTrDate(altIso, time);
+      selectedDay = label;
+      if (dayChipBtn) dayChipBtn.textContent = label;
+      finishYes(label, {
+        custom: true,
+        isoDate: altIso,
+        time,
+        msg: `Tamam — senin seçtiğin günde ${selectedPlace}’de görüşürüz.`,
+        pick: label,
+      });
+    });
+
+    function burstConfetti() {
+      const colors = ["#d4a574", "#e8b87a", "#f6efe6", "#c9784a", "#8b5a3c"];
+      for (let i = 0; i < 36; i++) {
+        const p = document.createElement("span");
+        p.className = "confetti";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.background = colors[i % colors.length];
+        p.style.animationDuration = 2 + Math.random() * 2.5 + "s";
+        p.style.animationDelay = Math.random() * 0.4 + "s";
+        p.style.width = 6 + Math.random() * 8 + "px";
+        p.style.height = 6 + Math.random() * 8 + "px";
+        $("done").appendChild(p);
+        setTimeout(() => p.remove(), 5000);
+      }
+    }
+  </script>
+</body>
+</html>
